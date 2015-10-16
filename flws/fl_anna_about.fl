@@ -1,0 +1,42 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0300 
+header_name {../include/fl_anna_about.h} 
+code_name {../gui/fl_anna_about.cxx}
+class fl_anna_about {open
+} {
+  Function {fl_anna_about()} {open
+  } {
+    Fl_Window about {
+      label {Artificial Neural Network Arquitecture (ANNA) 1.7} open
+      xywh {316 449 450 215} type Double color 180 non_modal visible
+    } {
+      Fl_Box {} {
+        label {fl_anna  is a basic application of ANNA and the FLTK library. 
+Feel free to use ANNA under the GNU public license. for questions or suggestions feel free to email me:
+                 Edmanuel Torres (eetorres@@gmail.com)}
+        xywh {12 6 430 68} color 55 align 181
+      }
+      Fl_Box {} {
+        label {FLTK Copyright  (C) 1991 Free Software Foundation, Inc. 59 Temple Place, Suite 330,  Boston, MA   02111-1307  USA,    It was originally developed by  Mr. Bill Spitzak  and  is currently maintained by a small group  of  developers across the world  with  central repository in the US. The FLTK project (http://www.fltk.org).}
+        xywh {3 107 445 84} align 149
+      }
+      Fl_Output _inf {selected
+        xywh {15 76 420 25} box PLASTIC_THIN_DOWN_BOX color 63 labelcolor 59 align 0
+        code0 {_inf->value("http://bpanna.sourceforge.net/");}
+      }
+      Fl_Button {} {
+        label {&Close}
+        callback {this->hide();}
+        xywh {368 187 70 21} box PLASTIC_UP_BOX color 81 labelcolor 57
+      }
+    }
+  }
+  Function {show()} {open
+  } {
+    code {about->show();} {}
+  }
+  Function {hide()} {open
+  } {
+    code {about->hide();} {}
+  }
+} 

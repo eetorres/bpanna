@@ -1,0 +1,193 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0300 
+header_name {../include/fl_anna_set.h} 
+code_name {../gui/fl_anna_set.cxx}
+decl {\#include <msmvtl/tmatrix.h>} {public local
+} 
+
+class fl_anna_set {open
+} {
+  decl {TVector<unsigned int> _nstr;} {public local
+  }
+  decl {TVector<unsigned int> _n_actf;} {public local
+  }
+  decl {unsigned int _in, _out, _num_ly;} {public local
+  }
+  Function {~fl_anna_set()} {} {
+    code {} {}
+  }
+  Function {fl_anna_set()} {open
+  } {
+    Fl_Window track {
+      label {Structure Editor} open
+      xywh {514 201 365 215} type Double color 52 labelfont 8 labelsize 12 non_modal visible
+    } {
+      Fl_Group {} {open
+        xywh {15 35 330 130} box BORDER_BOX color 188
+      } {
+        Fl_Box {} {
+          label {            neurons   function}
+          xywh {35 58 285 96} box THIN_DOWN_BOX color 19 align 5
+        }
+        Fl_Value_Input _ly_1 {
+          label {Layer 1:}
+          xywh {100 71 45 22} labelsize 12 minimum 1 maximum 10 step 1 value 2 textsize 12
+        }
+        Fl_Value_Input _ly_2 {
+          label {Layer 2:}
+          xywh {100 97 45 22} labelsize 12 minimum 1 maximum 10 step 1 value 3 textsize 12
+        }
+        Fl_Value_Input _ly_3 {
+          label {Layer 3:}
+          xywh {100 124 45 22} labelsize 12 minimum 1 maximum 10 step 1 value 1 textsize 12
+        }
+        Fl_Choice choice_activation_function_1 {open
+          xywh {155 71 160 22} down_box BORDER_BOX labelsize 12 textsize 12
+          code0 {o->add("Sigmoid"); o->add("Tan-Sigmoid");}
+          code3 {o->value(0);}
+        } {}
+        Fl_Choice choice_activation_function_2 {open
+          xywh {155 97 160 22} down_box BORDER_BOX labelsize 12 textsize 12
+          code0 {o->add("Sigmoid"); o->add("Tan-Sigmoid");}
+          code3 {o->value(0);}
+        } {}
+        Fl_Choice choice_activation_function_3 {open selected
+          xywh {155 124 160 22} down_box BORDER_BOX labelsize 12 textsize 12
+          code0 {o->add("Sigmoid"); o->add("Tan-Sigmoid");}
+          code3 {o->value(0);}
+        } {}
+      }
+      Fl_Button {} {
+        label {&Cancel}
+        callback {hide();}
+        xywh {80 180 87 25} box PLASTIC_UP_BOX color 113
+      }
+      Fl_Button {} {
+        label {&Display}
+        callback {//
+  unsigned int _o = _out;
+  fl_anna_display * _ns = new fl_anna_display();
+  
+  _nstr.resize((int)_nl->value());
+
+  if((int)_nl->value()>0)
+    _nstr[0]=(unsigned int)(_ly_1->value());
+  if((int)_nl->value()>1)
+    _nstr[1]=(unsigned int)(_ly_2->value());
+  if((int)_nl->value()>2)
+    _nstr[2]=(unsigned int)(_ly_3->value());
+  //_nstr.push_back(1);
+
+  _ns->setstruc(_in, _nstr, _o);
+  _ns->show();}
+        xywh {170 180 87 25} box PLASTIC_UP_BOX color 113
+        code0 {\#include<fl_anna_display.h>}
+      }
+      Fl_Button {} {
+        label {&Apply}
+        callback {//
+  _nstr.resize((int)_nl->value());
+  _n_actf.resize((int)_nl->value());
+
+  
+  if((int)_nl->value()>0){
+    _nstr[0]=(unsigned int)(_ly_1->value());
+    _n_actf[0]=(unsigned int)(choice_activation_function_1->value());
+  }
+  
+  if((int)_nl->value()>1){
+    _nstr[1]=(unsigned int)(_ly_2->value());
+    _n_actf[1]=(unsigned int)(choice_activation_function_2->value());
+  }
+  
+  if((int)_nl->value()>2){
+    _nstr[2]=(unsigned int)(_ly_3->value());
+    _n_actf[2]=(unsigned int)(choice_activation_function_3->value());
+  }
+  //_nstr.push_back(1);
+  hide();}
+        xywh {260 180 87 25} box PLASTIC_UP_BOX color 113
+      }
+      Fl_Spinner _nl {
+        label {Number of layers:}
+        callback {//
+  chk_layers();}
+        xywh {140 10 39 20} labelfont 1 labelsize 12 maximum 3 value 2
+      }
+      Fl_Spinner nop {
+        label {Outputs:}
+        callback {//
+  //cntr->deactivate();}
+        xywh {305 10 39 20} labelfont 1 labelsize 12
+      }
+    }
+    code {//
+  chk_layers();} {}
+  }
+  Function {show(unsigned int _inp, unsigned int _op)} {} {
+    code {//
+  _out = _op;
+  _in = _inp;
+  
+  track->show();} {}
+  }
+  Function {structure(TVector<unsigned int>& s)} {open return_type void
+  } {
+    code {//
+  _nstr = s;
+  _num_ly = _nstr.size();
+  
+  if(_num_ly>0){
+    _nl->value(_nstr.size());
+    _ly_1->value(_nstr[0]);
+  }
+  if(_num_ly>1) _ly_2->value(_nstr[1]);
+  if(_num_ly>2) _ly_3->value(_nstr[2]);
+  
+  
+  chk_layers();} {}
+  }
+  Function {chk_layers(void)} {open
+  } {
+    code {//
+  if((int)_nl->value()>0){
+    _ly_1->activate();
+    _ly_2->deactivate();
+    _ly_3->deactivate();
+    choice_activation_function_1->activate();
+    choice_activation_function_2->deactivate();
+    choice_activation_function_3->deactivate();
+  }if((int)_nl->value()>1){
+    _ly_1->activate();
+    _ly_2->activate();
+    _ly_3->deactivate();
+    choice_activation_function_1->activate();
+    choice_activation_function_2->activate();
+    choice_activation_function_3->deactivate();
+  }  if((int)_nl->value()>2){
+    _ly_1->activate();
+    _ly_2->activate();
+    _ly_3->activate();
+    choice_activation_function_1->activate();
+    choice_activation_function_2->activate();
+    choice_activation_function_3->activate();
+  }} {}
+  }
+  Function {structure(void)} {open return_type {TVector<unsigned int>&}
+  } {
+    code {//
+  return _nstr;} {}
+  }
+  Function {functions(void)} {open return_type {TVector<unsigned int>&}
+  } {
+    code {//
+  return _n_actf;} {}
+  }
+  Function {hide()} {} {
+    code {track->hide();} {}
+  }
+  Function {visible()} {return_type int
+  } {
+    code {return track->visible();} {}
+  }
+} 

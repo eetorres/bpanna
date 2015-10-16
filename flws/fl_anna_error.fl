@@ -1,0 +1,121 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0300 
+header_name {../include/fl_anna_error.h} 
+code_name {../gui/fl_anna_error.cxx}
+decl {\#include <fl_cartesian.h>} {public local
+} 
+
+decl {\#include <msmvtl/tmatrix.h>} {public local
+} 
+
+class fl_anna_error {open
+} {
+  decl {int counter;} {private local
+  }
+  decl {Ca_LinePoint * GP;} {selected private local
+  }
+  Function {fl_anna_error()} {open
+  } {
+    Fl_Window werror {
+      label {ANNA - Training Error Display} open
+      xywh {316 180 600 315} type Double color 180 visible
+    } {
+      Fl_Box {} {
+        xywh {9 8 583 275} box DOWN_BOX color 0 labelfont 8 labelsize 12
+      }
+      Fl_Box graph {
+        xywh {67 33 481 199} box FLAT_BOX color 0 selection_color 0 labelfont 8 labelsize 12 align 1
+        code0 {graph->current();}
+        class Ca_Canvas
+      }
+      Fl_Box error {
+        label ERROR
+        xywh {23 25 45 215} box FLAT_BOX color 0 selection_color 7 labelfont 8 labelsize 12 labelcolor 7 align 1
+        class Ca_Y_Axis
+      }
+      Fl_Box epoch {
+        label ITERATIONS
+        xywh {60 232 530 32} box FLAT_BOX color 0 labelfont 8 labelsize 12 labelcolor 7 align 2
+        class Ca_X_Axis
+      }
+      Fl_Value_Output _error {
+        label {error:}
+        xywh {50 288 149 20} box THIN_DOWN_BOX
+      }
+      Fl_Progress _prog {
+        xywh {214 288 265 20} box THIN_DOWN_BOX
+      }
+      Fl_Button close {
+        label {&Close}
+        callback {werror->hide();
+  //this->hide();}
+        xywh {495 288 94 20} box PLASTIC_UP_BOX color 81 labelfont 8 labelsize 12
+      }
+    }
+    code {//
+  counter = 0;
+  GP = 0;} {}
+  }
+  Function {show()} {open
+  } {
+    code {//
+  werror->show();
+  esetxaxis();
+  esetyaxis();} {}
+  }
+  Function {esetxaxis()} {open private
+  } {
+    code {//
+  epoch->min_val(0.0);
+  epoch->max_val(0.0);
+  epoch->label_format("%g");
+  epoch->minor_grid_color(fl_gray_ramp(5));
+  epoch->major_grid_color(fl_gray_ramp(10));
+  epoch->label_grid_color(fl_gray_ramp(10));
+  epoch->grid_visible(CA_MINOR_GRID|CA_MAJOR_GRID|CA_LABEL_GRID);
+  epoch->major_step(10);
+  epoch->label_step(10);
+  epoch->label_size(10);
+  epoch->axis_color(FL_WHITE);} {}
+  }
+  Function {esetyaxis()} {open private
+  } {
+    code {//
+  error->min_val(-0.01);
+  error->max_val(0.0);
+  error->label_format("%g");
+  error->minor_grid_color(fl_gray_ramp(5));
+  error->major_grid_color(fl_gray_ramp(10));
+  error->label_grid_color(fl_gray_ramp(10));
+  error->grid_visible(CA_MINOR_GRID|CA_MAJOR_GRID|CA_LABEL_GRID);
+  error->major_step(0.1);
+  error->label_step(0.1);
+  error->label_size(10);
+  error->axis_color(FL_WHITE);} {}
+  }
+  Function {grapherror(real err)} {open
+  } {
+    code {//
+  Ca_Canvas::current(graph);
+  //graph->current();
+  //error->current();
+  last_error(err);
+  error->rescale(CA_WHEN_MAX, err*1.1);
+  GP = new Ca_LinePoint(GP, counter, err, FL_CYAN);
+  counter++;
+  _prog->value(counter);
+  Fl::flush();} {}
+  }
+  Function {last_error(real r)} {open
+  } {
+    code {//
+  _error->value(r);} {}
+  }
+  Function {num_epochs(real r)} {open
+  } {
+    code {//
+  epoch->max_val(r);
+  _prog->minimum(0);
+  _prog->maximum(r);} {}
+  }
+} 

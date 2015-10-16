@@ -1,0 +1,57 @@
+#========================================================================
+# Copyright 2006 by Edmanuel Torres A. (eetorres@gmail.com)
+#
+# This library  is  free software;  you  can  redistribute  it and/or
+# modify  it  under  the  terms  of  the   GNU Library General Public
+# License  as  published  by  the  Free  Software Foundation;  either
+# version 2 of the License,  or  (at your option)   any later version
+# or much better FLTK license, wich allow you static linking.
+#
+# This  library  is  distributed  in the hope that it will be useful,
+# but  WITHOUT ANY WARRANTY;  without  even  the  implied warranty of
+# MERCHANTABILITY  or FITNESS FOR A PARTICULAR PURPOSE.   See the GNU
+# Library General Public License for more details.
+#
+# You should have  received a copy  of the GNU Library General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+# USA.
+#
+# Get the latest version at http://bpanna.sourceforge.net/
+#
+#========================================================================
+
+CXX = g++
+
+MPRG = bpanna fl_bpanna
+MSRC = $(MPRG:=.cxx)
+MOBJ = $(MSRC:.cxx=.o)
+CSRC = anna_bpn_net.cxx anna_bpn_layer.cxx anna_bpn_neuron.cxx
+FSRC = fl_anna_main.cxx fl_anna_error.cxx fl_anna_set.cxx fl_anna_about.cxx \
+       fl_anna_display.cxx  fl_cartesian.cxx fl_table.cxx
+
+COBJ = $(CSRC:.cxx=.o)
+FOBJ = $(FSRC:.cxx=.o)
+
+MDIR = $(shell sh -c pwd)
+IDIR = -I../ -I$(MDIR)/../include
+SDIR = $(MDIR)/../src/
+ODIR = $(MDIR)/../obj/
+XDIR = $(MDIR)/../bin/
+
+DIRS = src gui prg obj bin
+
+OPTIM  = -O -Wall
+LMATH = -lm
+
+LX11R = -lGL -lXext -lXft -lXinerama
+#LFLTK = -lfltk -lfltk_gl -lfltk_images
+LFLTK = $(shell fltk-config  --use-gl --ldstaticflags)
+
+CFLAG = $(OPTIM) -c
+LFLAG = $(OPTIM) $(LFLTK) $(LX11R)
+
+.SUFFIXES:	.cxx .o .h
+
+.cxx.o:
+	$(CXX) $(CFLAG) $< -o $(ODIR)$@ $(IDIR)

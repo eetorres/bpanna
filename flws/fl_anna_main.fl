@@ -1,0 +1,778 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0300 
+header_name {../include/fl_anna_main.h} 
+code_name {../gui/fl_anna_main.cxx}
+decl {\#include <anna/anna_bpn_net.h>} {public local
+} 
+
+decl {\#include <FL/Fl_File_Chooser.H>} {private local
+} 
+
+decl {\#include <FL/fl_draw.H>} {private local
+} 
+
+decl {\#include <fl_anna_error.h>} {public local
+} 
+
+class fl_anna_main {open : {public anna_bpn_net}
+} {
+  decl {TMatrix<real> data2, res;} {private local
+  }
+  decl {TVector<real> outdata;} {private local
+  }
+  decl {TVector<unsigned int> _str;} {private local
+  }
+  decl {TVector<unsigned int> _actf;} {private local
+  }
+  decl {int epoch_update, ng, _xx;} {private local
+  }
+  decl {unsigned int _nop;} {private local
+  }
+  decl {double err, _wait_time;} {private local
+  }
+  decl {const char * p_dir_filename;} {public local
+  }
+  decl {const char * p_filename;} {public local
+  }
+  decl {const char * p_dir;} {public local
+  }
+  decl {char file_name[50];} {private local
+  }
+  decl {char dir_name[200];} {private local
+  }
+  decl {bool is_data, is_set, is_build;} {private local
+  }
+  decl {fl_anna_error * we;} {private local
+  }
+  Function {fl_anna_main()} {open
+  } {
+    code {//
+  ng=0;
+  _nop=1;
+  is_data = false;
+  is_set = false;
+  is_build = false;
+  strcpy(file_name,"noname.txt");
+  strcpy(dir_name,"./");
+  //
+  set_output(_nop);} {}
+    Fl_Window mdi_anna {
+      label {Artificial Neural Network Arquitecture ANNA} open
+      xywh {322 181 765 565} type Double color 44 labelsize 12 resizable visible
+    } {
+      Fl_Group {} {
+        xywh {-2 0 767 20}
+      } {
+        Fl_Menu_Bar {} {open
+          xywh {-2 0 767 20} box THIN_UP_BOX color 188
+        } {
+          Submenu {} {
+            label {&File} open
+            xywh {0 0 63 20}
+          } {
+            MenuItem {} {
+              label {&Load...}
+              callback {//
+  load_data();}
+              xywh {0 0 30 20}
+            }
+            MenuItem {} {
+              label {&Save ANN...}
+              callback {//
+  if(is_data)
+    save_ann();}
+              xywh {20 20 30 20}
+            }
+            MenuItem {} {
+              label {Save &data...}
+              callback {//
+  if(is_data)
+    save_data();}
+              xywh {10 10 30 20}
+            }
+            MenuItem {} {
+              label {&Quit}
+              callback {//
+  mdi_anna->hide();}
+              xywh {20 20 30 20}
+            }
+          }
+          Submenu {} {
+            label {&Edit} open
+            xywh {0 0 63 20}
+          } {
+            MenuItem {} {
+              label {set anna}
+              callback {//
+  if(is_data)
+    set_anna();}
+              xywh {30 30 30 20}
+            }
+          }
+          Submenu {} {
+            label {T&ools} open
+            xywh {5 5 63 20}
+          } {
+            MenuItem {} {
+              label Display
+              callback {//
+  display_anna();}
+              xywh {60 60 30 20}
+            }
+            MenuItem {} {
+              label {&Build}
+              callback {//
+  build_anna();}
+              xywh {60 60 30 20}
+            }
+            MenuItem {} {
+              label {&Train}
+              callback {//
+  train_anna();}
+              xywh {70 70 30 20}
+            }
+          }
+          Submenu {} {
+            label {&Help} open
+            xywh {0 0 63 20}
+          } {
+            MenuItem {} {
+              label {&About}
+              callback {// About message for ANNA
+
+  fl_anna_about * about = new fl_anna_about();
+  about->show();}
+              xywh {70 70 30 20}
+            }
+          }
+        }
+      }
+      Fl_Group {} {open
+        xywh {0 19 605 516} resizable
+      } {
+        Fl_Group {} {open
+          xywh {0 20 605 53}
+        } {
+          Fl_Box {} {
+            xywh {0 21 605 52} box FLAT_BOX color 26 labelsize 12
+          }
+          Fl_Button button_load_data {
+            label load
+            callback {//
+  load_data();}
+            image {icons/data.png} xywh {6 24 44 46} box GTK_THIN_UP_BOX color 2 selection_color 33 labelsize 10
+          }
+          Fl_Button button_save {
+            label data
+            callback {//
+  save_data();}
+            image {icons/save.png} xywh {381 24 44 46} box GTK_THIN_UP_BOX color 229 selection_color 33 labelsize 10 deactivate
+          }
+          Fl_Button button_set {
+            label set
+            callback {//
+  set_anna();
+  button_save_ann->activate();}
+            image {icons/set.png} xywh {68 24 44 46} box GTK_THIN_UP_BOX color 3 selection_color 33 labelsize 10 deactivate
+            code0 {\#include "fl_anna_set.h"}
+          }
+          Fl_Button button_ann_view {
+            label show
+            callback {//
+  display_anna();}
+            image {icons/display.png} xywh {115 24 44 46} box GTK_THIN_UP_BOX color 3 selection_color 33 labelsize 10 deactivate
+            code0 {\#include<fl_anna_display.h>}
+          }
+          Fl_Button button_start_ann {
+            label start
+            callback {//
+  build_anna();}
+            image {icons/start.png} xywh {179 24 44 46} box GTK_THIN_UP_BOX color 210 selection_color 33 labelsize 10 deactivate
+          }
+          Fl_Button button_train {
+            label train
+            callback {//
+  train_anna();}
+            image {icons/train.png} xywh {225 24 44 46} box GTK_THIN_UP_BOX color 210 selection_color 33 labelsize 10 deactivate
+          }
+          Fl_Button button_apply {
+            label apply
+            callback {//
+  res = evalue();
+  add2grid(res);}
+            image {icons/apply.png} xywh {271 24 44 46} box GTK_THIN_UP_BOX color 210 selection_color 33 labelsize 10 deactivate
+          }
+          Fl_Button button_stop {
+            label stop
+            callback {//
+  _xx = (int)epochs->value();}
+            image {icons/stop.png} xywh {317 24 44 46} box GTK_THIN_UP_BOX color 88 selection_color 33 labelsize 10 deactivate
+          }
+          Fl_Button button_save_ann {
+            label ann
+            callback {//
+  if(is_data)
+    save_ann();}
+            image {icons/save.png} xywh {428 24 44 46} box GTK_THIN_UP_BOX color 229 selection_color 33 labelsize 10 deactivate
+          }
+          Fl_Button button_exit {
+            label exit
+            callback {//
+//
+  _xx = (int)epochs->value();
+  mdi_anna->hide();}
+            image {icons/exit.png} xywh {499 24 44 46} box GTK_THIN_UP_BOX color 1 selection_color 33 labelsize 10
+          }
+          Fl_Button {} {
+            label about
+            callback {// About message for ANNA
+
+  fl_anna_about * about = new fl_anna_about();
+  about->show();}
+            image {icons/about.png} xywh {547 24 44 46} box GTK_THIN_UP_BOX down_box PLASTIC_THIN_DOWN_BOX color 2 selection_color 33 labelsize 10
+            code0 {\#include<fl_anna_about.h>}
+          }
+          Fl_Box {} {
+            xywh {593 22 5 48} labelsize 10 resizable
+          }
+        }
+        Fl_Box table {
+          xywh {0 74 605 460} box THIN_DOWN_BOX color 222 resizable
+          code0 {\#include<fl_table.h>}
+          class CTable
+        }
+      }
+      Fl_Group {} {open
+        xywh {607 21 155 542} color 15
+      } {
+        Fl_Group {} {open
+          xywh {607 21 155 307} box PLASTIC_DOWN_BOX color 15 labelsize 12
+        } {
+          Fl_Group _trn_set {
+            label {Traning settings:} open
+            xywh {609 38 151 104} labelsize 12 align 5
+          } {
+            Fl_Group _lm_op {
+              xywh {613 73 143 61} box PLASTIC_DOWN_BOX color 55 labelsize 12
+            } {
+              Fl_Value_Input _mu {
+                label {Mu:}
+                callback {//
+  if((real)_mu->value() == 0){
+    _lm->value(0);
+    _cg->value(1);
+    //_lm_op->deactivate();
+  }}
+                tooltip {LM parameter} xywh {692 76 48 17} box THIN_DOWN_BOX labelsize 12 maximum 1e+08 step 0.01 value 0.01
+              }
+              Fl_Value_Input _alpha {
+                label {Alpha:}
+                tooltip {Learning rate} xywh {692 94 48 17} box THIN_DOWN_BOX labelsize 12 step 0.01 value 0.2 deactivate
+              }
+              Fl_Value_Input _beta {
+                label {Beta:}
+                tooltip Momentum xywh {692 112 48 17} box THIN_DOWN_BOX labelsize 12 minimum 0.01 step 0.01 value 0.1 deactivate
+              }
+            }
+            Fl_Group _ta {
+              callback {//}
+              xywh {613 40 143 24} box PLASTIC_DOWN_BOX color 55 labelsize 12
+            } {
+              Fl_Check_Button _lm {
+                label LM
+                callback {// default value
+  select_training_algorithm(0);
+  if((bool)_lm->value()){
+    _mu->activate();
+    _alpha->deactivate();
+    _beta->deactivate();
+  }}
+                tooltip {Levenberg-Marquardt} xywh {645 45 17 17} type Radio down_box DOWN_BOX value 1 labelsize 12 align 4
+              }
+              Fl_Check_Button _sd {
+                label SD
+                callback {//
+  select_training_algorithm(1);
+  if((bool)_sd->value()){
+    _mu->deactivate();
+    _alpha->activate();
+    _beta->deactivate();
+  }}
+                tooltip {Steepest Descent} xywh {687 45 17 17} type Radio down_box DOWN_BOX labelsize 12 align 4
+              }
+              Fl_Check_Button _cg {
+                label CG
+                callback {//
+  select_training_algorithm(2);
+  if((bool)_cg->value()){
+    _mu->deactivate();
+    _alpha->activate();
+    _beta->activate();
+  }}
+                tooltip {Conjugate Gradient} xywh {730 45 17 17} type Radio down_box DOWN_BOX labelsize 12 align 4
+              }
+            }
+          }
+          Fl_Group {} {
+            label Weights
+            xywh {613 156 143 39} box PLASTIC_DOWN_BOX color 55 labelsize 12 align 5
+          } {
+            Fl_Check_Button _rg {
+              label Random
+              callback {//_rs->value(0); //default value
+  if(_rg->value())
+    _rs->deactivate();
+  else{
+    _rs->activate();
+    set_weights_seed((int)_rs->value());
+  }}
+              xywh {690 156 19 23} down_box DOWN_BOX value 1 labelsize 12 align 4
+            }
+            Fl_Value_Input _rs {
+              label {Seed:}
+              callback {set_weights_seed((int)_rs->value());}
+              xywh {675 175 33 17} box THIN_DOWN_BOX labelsize 12 maximum 1e+09 step 1 value 123 deactivate
+            }
+          }
+        }
+        Fl_Group {} {
+          xywh {608 330 152 204} box THIN_DOWN_BOX color 47 labelsize 12 resizable
+        } {
+          Fl_Box {} {
+            xywh {610 332 147 198} box DOWN_BOX color 0 labeltype NO_LABEL labelsize 12
+          }
+          Fl_Box graph_track {
+            xywh {613 336 140 187} box FLAT_BOX color 0 labelfont 8 labelsize 12
+            code0 {//graph_track->current();}
+            class Ca_Canvas
+          }
+          Fl_Box position {
+            xywh {613 332 1 194} box FLAT_BOX color 0 labelfont 8 labelsize 12 align 1
+            code0 {//tsetyaxis();}
+            class Ca_Y_Axis
+          }
+          Fl_Box value {
+            xywh {610 521 145 1} box FLAT_BOX color 0 labelfont 8 labelsize 12 align 2
+            code0 {//tsetxaxis();}
+            class Ca_X_Axis
+          }
+        }
+        Fl_Group {} {open
+          xywh {697 537 58 22} labelsize 12
+        } {
+          Fl_Value_Input _update {
+            label {Skip:}
+            callback {epoch_update = (int)_update->value();}
+            xywh {727 542 28 17} box THIN_DOWN_BOX labelsize 12 minimum 1 maximum 1e+09 step 10 value 1
+          }
+        }
+        Fl_Value_Input epochs {
+          label {Epochs:}
+          xywh {661 542 34 17} box THIN_DOWN_BOX labelsize 12 minimum 1 maximum 1e+06 step 10 value 10
+        }
+      }
+      Fl_Group {} {open
+        xywh {0 537 605 25}
+      } {
+        Fl_Box sb {
+          label {ANNA 1.7}
+          xywh {1 537 604 25} box PLASTIC_THIN_DOWN_BOX color 15 labelfont 15 labelcolor 26 align 24
+        }
+        Fl_Value_Output _rows {
+          label {Rows:}
+          xywh {54 540 35 20} color 2 labelfont 1 labelsize 12 maximum 1e+09 step 1 deactivate
+        }
+        Fl_Value_Output _cols {
+          label {Columns:}
+          xywh {156 540 35 20} color 2 labelfont 1 labelsize 12 maximum 1e+09 step 1 deactivate
+        }
+      }
+    }
+    code {epoch_update = 10;
+_wait_time = 0;} {}
+  }
+  Function {load_data(void)} {open
+  } {
+    code {//
+  char fname[200];
+  Fl_File_Chooser *p = new Fl_File_Chooser(dir_name,"*.txt",1,"Select file");
+  p->directory(dir_name);
+  p->show();
+  while( p->visible())
+	  Fl::wait();
+  if(p->value()){
+    p_dir_filename = (char*)p->value();
+    p_dir  = (char*)p->directory();
+    p_filename = fl_filename_name(p->value());
+
+    //f = fl_filename_name(p->value());
+    strcpy(dir_name,(char*)p_dir);
+    strcpy(file_name,(char*)p_filename);
+    sprintf(fname, "ANNA - %s",(char*)file_name);
+    mdi_anna->label((char*)fname);
+    read_data_file((char*)p_dir_filename);
+    //
+    _rows->value((int)get_rows());
+    _cols->value((int)get_cols());
+    set_input((unsigned int)get_cols() - get_output());
+    loadgrid(get_data());
+    button_set->activate();
+    button_save->activate();
+    //cntr->deactivate();
+    //
+    is_data = true;
+  }} {}
+  }
+  Function {save_data(void)} {open
+  } {
+    code {//
+  char fname[200];
+  Fl_File_Chooser *p = new Fl_File_Chooser(dir_name,"*.txt",2,"Select file");
+  p->directory(dir_name);
+  p->show();
+  while( p->visible())
+	  Fl::wait();
+  if(p->value()){
+    p_dir_filename = (char*)p->value();
+    p_dir  = (char*)p->directory();
+    p_filename = fl_filename_name(p->value());
+    
+    strcpy(dir_name,(char*)p_dir);
+    strcpy(file_name,(char*)p_filename);
+    sprintf(fname,"ANNA - %s",(char*)file_name);
+    data2.write_file((char*)p_dir_filename);
+  }} {}
+  }
+  Function {save_ann(void)} {open
+  } {
+    code {//
+  char fname[200];
+  Fl_File_Chooser *p = new Fl_File_Chooser(dir_name,"*.ann",2,"Select file");
+  p->directory(dir_name);
+  p->show();
+  while( p->visible())
+	  Fl::wait();
+  if(p->value()){
+    p_dir_filename = (char*)p->value();
+    p_dir  = (char*)p->directory();
+    p_filename = fl_filename_name(p->value());
+    
+    strcpy(dir_name,(char*)p_dir);
+    strcpy(file_name,(char*)p_filename);
+    sprintf(fname,"ANNA - %s",(char*)file_name);
+    save_bp_anna((char*)p_dir_filename);
+    //data2.write_file((char*)p_dir_filename);  
+  }} {}
+  }
+  Function {set_anna(void)} {open
+  } {
+    code {//
+  //TVector<unsigned int> _str;
+  fl_anna_set * sn = new fl_anna_set();
+   
+  if(is_data){
+    sn->structure(_str);
+    sn->nop->value(_nop);
+    sn->show(get_input(),get_output());
+    while(sn->visible()) Fl::wait();
+    //
+    _str = sn->structure();
+    _actf = sn->functions();
+    _nop = (unsigned int) sn->nop->value();
+    //
+    set_output(_nop);
+    set_input((unsigned int)get_cols() - get_output());
+    set_layers((int)_str.size());
+    //
+    create();
+    //
+    if((int)_str.size()>0){
+      set_neurons_in_layer(0,_str[0]);
+      set_function_in_layer(0,_actf[0]);
+    }
+    if((int)_str.size()>1){
+      set_neurons_in_layer(1,_str[1]);
+      set_function_in_layer(1,_actf[1]);
+    }
+    if((int)_str.size()>2){
+      set_neurons_in_layer(2,_str[2]);
+      set_function_in_layer(2,_actf[2]);
+    }
+    //
+    button_ann_view->activate();
+    button_start_ann->activate();
+    button_train->deactivate();
+    button_apply->deactivate();
+    is_set = true;
+  }} {}
+  }
+  Function {display_anna(void)} {} {
+    code {//
+  TVector<unsigned int> _nstr;
+  
+  if(is_set){
+    unsigned int _o = get_output();
+    unsigned int _in = get_input();
+    unsigned int _ly = get_number_layers();
+    fl_anna_display * _ns = new fl_anna_display();
+  
+    _nstr.resize(_ly-1);
+    for(unsigned int i=0; i<_ly-1; i++){
+      _nstr[i]=get_neuron_in_layer(i);
+    }
+    //
+    _ns->setstruc(_in, _nstr, _o);
+    _ns->show();
+  }} {}
+  }
+  Function {build_anna(void)} {open
+  } {
+    code {//
+  if(is_set){
+    if((real)_mu->value() == 0){
+      _lm->value(0);
+      _cg->value(1);
+    }
+ 
+    setdata();
+    set_weights_seed((int)_rs->value());
+    initialize();
+  
+    set_mu((real)_mu->value());
+    set_alpha((real)_alpha->value());
+    set_beta((real)_beta->value());
+  
+    button_train->activate();
+    
+    is_build = true;
+  }} {}
+  }
+  Function {train_anna(void)} {open
+  } {
+    code {//
+  we = new fl_anna_error();
+  
+  if(is_build){
+    we->show();
+    we->num_epochs((real)epochs->value());
+    //setdata();
+    train((int)epochs->value());
+    button_apply->activate();
+  }} {}
+  }
+  Function {loadgrid(TMatrix<real>& _d)} {} {
+    code {//
+  char buff[256];
+  data2 = _d;
+  // Set a popup menu for table.
+  // table.menuCopy(popup);
+  //
+  // table.when(TABLE_WHEN_DCLICK);
+  // table.callback(testMenu);
+  //
+  // Set label alignment
+  table->clear(true);
+  table->align(FL_ALIGN_TOP | FL_ALIGN_RIGHT);
+  //
+  for(unsigned int _tt=0; _tt<_d.cols(); _tt++){
+    sprintf(buff,"%c%c",char(_tt/26)+'A'-1,(_tt%26)+'A');
+    if(*buff<'A')
+       memmove(buff,buff+1,2); 
+    //               title    width
+    table->addColumn(buff, 150);
+  }
+  // table->addColumn("Where"); // uses default width of 150
+  // table->addColumn("\#", 100, (Fl_Align)FL_ALIGN_CENTER, Table::compareInt);
+  // table->addHiddenColumn("hidden"); // Add hidden column. 
+  // Label is not really used.
+  //
+  // Just some meaningless values to show the table.
+  // Columns can be added no longer after data is added to the table
+  for(unsigned int _row=0; _row<_d.rows(); _row++){
+    for(unsigned _col=0; _col<_d.cols(); _col++){
+      sprintf(buff,"%lf",_d[_row][_col]);
+      table->addCell(buff);
+    }
+  }
+  table->redraw();
+  // Table::clear() clears the whole table} {}
+  }
+  Function {add2grid(TMatrix<real>& _d)} {} {
+    code {//
+  int _sz = _d.cols()-1;
+  
+  for(int _i=_sz; _i>=0; _i--){
+     outdata = _d.get_col(_i);
+     data2.add_col(outdata);
+  }
+  loadgrid(data2);} {}
+  }
+  Function {train(int ep)} {open
+  } {
+    code {//
+  int sp=(int)_update->value();
+  real rr=0;
+  button_stop->activate();
+  for(_xx=0; _xx<ep; _xx++){
+     training();
+     rr = get_error();
+     
+     if(sp==0){
+         update();
+         sp=(int)_update->value();
+     }
+     //rr /= data2.rows();
+     we->grapherror(rr);
+     sp--;
+     rr = 0;
+     Fl::check();
+  }
+  button_stop->deactivate();} {}
+  }
+  Function {setdata()} {} {
+    code {//
+  tsetyaxis();
+  tsetxaxis();
+  initgraph();} {}
+  }
+  Function {initgraph()} {open
+  } {
+    code {//
+  Fl_Color _rgb;
+  double dat;
+  Ca_Canvas::current(graph_track);
+  //cleartrack();
+  graph_track->clear();
+  graph_track->current();
+  
+  res = get_output_patterns();
+  position->max_val(res.rows()-1);
+  value->max_val(1.1*res.get_col(0).get_max());
+  if(res.get_col(0).get_min()<0)
+     value->min_val(1.1*res.get_col(0).get_min());
+  else if(res.get_col(0).get_min()==0)
+     value->min_val(-0.1);
+  else
+     value->min_val(0.9*res.get_col(0).get_min());
+  value->current();
+  
+  uchar _wc = uchar(255/(1+res.cols()));
+  Ca_LinePoint * GT=NULL;
+  for(unsigned int i=0; i<res.cols(); i++){
+    GT=NULL;
+    _rgb = fl_rgb_color(255,(uchar)(i+1)*_wc,(uchar)(i+1)*_wc);
+    for(unsigned int j=0; j<res.rows(); j++){
+	  dat = res[j][i];
+	  GT=new Ca_LinePoint(GT,dat,j,_rgb,FL_BLACK);
+    }
+  }
+  resetgraph();
+  Fl::check();} {}
+  }
+  Function {tsetxaxis()} {open private
+  } {
+    code {//
+  position->min_val(0.0);
+  position->max_val(0.0);
+  //position->label_format("%0.3g");
+  position->minor_grid_color(fl_gray_ramp(5));
+  position->major_grid_color(fl_gray_ramp(10));
+  //position->label_grid_color(fl_gray_ramp(10));
+  position->grid_visible(CA_MINOR_GRID);//|CA_MAJOR_GRID);
+  position->major_step(10);
+  //position->label_step(10);
+  //position->label_size(10);
+  //epoch->axis_color(FL_WHITE);} {}
+  }
+  Function {tsetyaxis()} {open private
+  } {
+    code {//
+  value->min_val(0.0);
+  value->max_val(0.0);
+  value->label_format("%.3f");
+  value->minor_grid_color(fl_gray_ramp(5));
+  value->major_grid_color(fl_gray_ramp(10));
+  value->label_grid_color(fl_gray_ramp(10));
+  value->grid_visible(CA_MINOR_GRID|CA_MAJOR_GRID|CA_LABEL_GRID);
+  value->major_step(10);
+  value->label_step(0.1);
+  value->label_size(10);
+  value->axis_color(FL_WHITE);} {selected
+    }
+  }
+  Function {resetgraph()} {} {
+    code {//setyaxis();
+  //setxaxis();
+  /*
+  Ca_Canvas::current(graph);
+  if(sizeof(GP) > 0)
+  {
+      delete GP;
+      GP = NULL;
+  }
+  graph->clear();
+  */} {}
+  }
+  Function {show()} {} {
+    code {mdi_anna->show();} {}
+  }
+  Function {graphtraindata()} {private
+  } {
+    code {// 
+  Fl_Color _rgb;
+  double dat;
+  cleartrack();
+  graph_track->clear();
+  graph_track->current();
+  value->current();
+  
+  res = get_output_patterns();
+  uchar _wc = uchar(255/(1+res.cols()));
+  Ca_LinePoint * GT=NULL;
+  for(unsigned int i=0; i<res.cols(); i++){
+    GT=NULL;
+    _rgb = fl_rgb_color(255,(uchar)(i+1)*_wc,(uchar)(i+1)*_wc);
+    for(unsigned int j=0; j<res.rows(); j++){
+	  dat = res[j][i];
+	  GT=new Ca_LinePoint(GT,dat,j,_rgb,FL_BLACK);
+    }
+  }} {}
+  }
+  Function {graphresdata()} {private
+  } {
+    code {// 
+  Fl_Color _rgb;
+  double dat; 
+  Ca_Canvas::current(graph_track);
+  Ca_LinePoint * GT=NULL;
+  
+  res = get_ann_outputs();
+  uchar _wc = uchar(255/(1+res.cols()));
+  for(unsigned int i=0; i<res.cols(); i++){
+    GT=NULL;
+    _rgb = fl_rgb_color((uchar)(i+1)*_wc,(uchar)(i+1)*_wc,255);
+    for(unsigned int j=0; j<res.rows(); j++){
+       dat = res[j][i];
+       //GT=new Ca_LinePoint(GT,dat,j,FL_RED,FL_BLACK);
+       GT=new Ca_LinePoint(GT,dat,j,_rgb,FL_BLACK);
+    }
+  }} {}
+  }
+  Function {cleartrack()} {private
+  } {
+    code {Ca_Canvas::current(graph_track);
+  graph_track->clear();
+  graph_track->current();
+  value->current();} {}
+  }
+  Function {update()} {private
+  } {
+    code {cleartrack();
+  graphtraindata();
+  graphresdata();
+  //
+  //correlation();
+  //Fl::check();
+  Fl::wait(_wait_time);} {}
+  }
+} 

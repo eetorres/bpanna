@@ -1,0 +1,8 @@
+- different neural network
+- supervised learning algorithms
+- save/load the ANN structure
+- export to C/C++ function
+- export to standalone program
+- colormap ANN visualization
+- icons
+
