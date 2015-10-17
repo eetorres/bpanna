@@ -49,8 +49,6 @@ Compilation instructions
 
 DOCUMENTATION:
 
- The basics functions are:
-
  read_data_file(file);          load a data file
  
  set_output(no);                Set number of outputs (no)
