@@ -32,7 +32,9 @@ Compilation instructions
  Copy the compress file wherever you want to compile and untar it
  
  > $ tar -xvzf fl_anna.tar.gz
+ 
  > $ cd fl_anna
+ 
  > $ make
  
  you will find a test programs in the "bin" directory just type
