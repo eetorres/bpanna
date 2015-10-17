@@ -16,8 +16,7 @@ NOTE: Older versions of bpanna can be found at https://sourceforge.net/projects/
     Spreadsheet data table
 
 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                      Directories
+Project stucture
 
  include: head files
  fws:     FLUID GUI development workspace
@@ -27,8 +26,8 @@ NOTE: Older versions of bpanna can be found at https://sourceforge.net/projects/
  obj:     temporal object files
  bin:     executable example programs
 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                   Compilation instructions
+
+Compilation instructions
 
  Copy the compress file wherever you want to compile and untar it
  > $ tar -xvzf fl_anna.tar.gz
@@ -41,9 +40,7 @@ for no GUI interface or,
  > ./fl_bpann
  for a FLTK GUI application
 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
- DOCUMENTATION:
+DOCUMENTATION:
 
  The basics steps are:
 
