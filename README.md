@@ -49,20 +49,30 @@ Compilation instructions
 
 DOCUMENTATION:
 
- The basics steps are:
+ The basics functions are:
 
  read_data_file(file);          load a data file
+ 
  set_output(no);                Set number of outputs (no)
+ 
  set_input(ni);                 Set number of inputs (ni)
+ 
  set_layers(nl);                Set number of layers (nl)
+ 
  create();                      create the neural network framework
+ 
  set_neurons_in_layer(l,n);     Set number (n) of neurons of the layer (l)
+ 
  select_training_algorithm(b);  true = Levenverg-Maquardt (LM),
                                 false = Conjugate gradient (CG)
  initialize();                  initialize the neural network weights
+ 
  set_alpha(alpha);              this is the CG learning rate
+ 
  set_mu(mu);                    this is the LM perturbation factor
+ 
  training();                    one step training
+ 
  evalue();                      evalue the net and give the result in a vector
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
