@@ -1,6 +1,8 @@
 # bpanna
 The BPANNA is a flexible Back propagation neural network in C++ with GUI.
 
+https://github.com/eetorres/bpanna/blob/master/img/main.png
+
 NOTE: Older versions of bpanna can be found at https://sourceforge.net/projects/bpanna/
 
     Very fast
