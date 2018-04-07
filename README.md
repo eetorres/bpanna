@@ -17,6 +17,9 @@ NOTE: Older versions of bpanna can be found at https://sourceforge.net/projects/
     Graphical structure editor
     Spreadsheet data table
 
+More information:
+
+https://sites.google.com/site/eetorres/anna
 
 Project stucture
 
