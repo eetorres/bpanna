@@ -11,7 +11,7 @@ NOTE: Older versions of bpanna can be found at https://sourceforge.net/projects/
     Conjugate Gradient
     Step Descent
     Arbritrary number of layers
-    Multiple outpus
+    Multiple outputs
     Graphical user interface
     Graphical error
     Graphical structure editor
