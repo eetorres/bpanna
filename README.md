@@ -92,6 +92,8 @@ DOCUMENTATION:
  anna_bpn_net.cxx anna_bpn_layer.cxx anna_bpn_neuron.cxx
 
  The distribution include a demo which should work on Linux systems.
+ 
+ If you want a binary, but only if you really cannot compile it. I can help you to compile it anyway. Send me an email.
 
 
  So enjoy it!
